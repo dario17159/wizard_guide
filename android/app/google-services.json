@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "627952993279",
+    "project_id": "wizard-guide-2c7fa",
+    "storage_bucket": "wizard-guide-2c7fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627952993279:android:c9f8a1179f60752cd7ddca",
+        "android_client_info": {
+          "package_name": "com.example.wizard_guide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIAxVIxORojxpKAAm6kB5lAXid_5iGyhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
