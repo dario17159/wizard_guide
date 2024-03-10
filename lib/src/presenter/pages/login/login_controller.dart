@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wizard_guide/src/core/extensions/extensions.dart';
@@ -21,6 +22,17 @@ class LoginController extends GetxController {
   void onInit() {
     emailController.addListener(_validateEmail);
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      Get.offAll(
+        () => const HomePage(),
+        binding: HomeBinding(),
+      );
+    }
+    super.onReady();
   }
 
   @override
@@ -61,5 +73,4 @@ class LoginController extends GetxController {
           title: 'Atención', message: 'Usuario o contraseña incorrecta');
     }
   }
-
 }

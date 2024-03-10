@@ -4,7 +4,7 @@ import 'package:wizard_guide/src/core/constants/icon_routes.dart';
 import 'package:wizard_guide/src/core/enums/enums.dart';
 import 'package:wizard_guide/src/presenter/pages/home/home_controller.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends GetWidget<HomeController> {
   const HomePage({super.key});
 
   @override
@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
         title: const Text('Wizard Guide'),
       ),
       body: PageView(
+        controller: controller.pageController,
         children: [
           Container(
             color: Colors.red,
@@ -33,29 +34,31 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class _BottomBarWidget extends StatelessWidget {
+class _BottomBarWidget extends GetWidget<HomeController> {
   const _BottomBarWidget();
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.list),
-          label: 'Pendientes',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.rule_rounded),
-          label: 'En progreso',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.checklist_rtl_rounded),
-          label: 'Terminadas',
-        ),
-      ],
-      currentIndex: 0,
-      selectedItemColor: Colors.amber[800],
-      onTap: (value) {},
+    return Obx(
+      () => BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Pendientes',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.rule_rounded),
+            label: 'En progreso',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.checklist_rtl_rounded),
+            label: 'Terminadas',
+          ),
+        ],
+        currentIndex: controller.currentPageIndex.value,
+        selectedItemColor: const Color(0xffED5828),
+        onTap: (value) => controller.onClickBottomItem(value),
+      ),
     );
   }
 }
