@@ -6,9 +6,13 @@ import 'package:wizard_guide/src/core/enums/enums.dart';
 import 'package:wizard_guide/src/core/extensions/date_time_exrension.dart';
 import 'package:wizard_guide/src/core/extensions/string_extension.dart';
 import 'package:wizard_guide/src/core/services/services.dart';
+import 'package:wizard_guide/src/data/repositories/api_repository_impl.dart';
 import 'package:wizard_guide/src/domain/entities/entities.dart';
+import 'package:wizard_guide/src/domain/repositories/api_repository.dart';
 
 class SignUpController extends GetxController {
+  final IApiRepository _apiRepository = Get.find<ApiRepositoryImpl>();
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
@@ -35,6 +39,7 @@ class SignUpController extends GetxController {
   bool _phoneValid = false;
   bool _ageValid = false;
   bool _passwordValid = false;
+  DateTime? dateOfBirth;
 
   @override
   void onInit() {
@@ -107,7 +112,14 @@ class SignUpController extends GetxController {
         _phoneValid &&
         genderSelected.value != null) {
       DialogService.showLoading(message: 'Aguarde un momento...');
-      await Future.delayed(const Duration(seconds: 3));
+      final userData = UserData(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+        dateOfBirth: dateOfBirth!,
+        gender: genderSelected.value!,
+        phone: phoneController.text.trim(),
+      );
+      final data = _apiRepository.register(userData);
       DialogService.hideLoading();
     } else {
       SnackbarService.showInformative(
@@ -118,16 +130,16 @@ class SignUpController extends GetxController {
   }
 
   Future<void> onClickDateOfBirth(BuildContext context) async {
-    final dateSelected = await showDatePicker(
+    dateOfBirth = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
 
-    if (dateSelected != null) {
-      if (dateSelected.parseToAge >= 10) {
-        ageController.text = dateSelected.parseToAge.toString();
+    if (dateOfBirth != null) {
+      if (dateOfBirth!.parseToAge >= 10) {
+        ageController.text = dateOfBirth!.parseToAge.toString();
         _ageValid = true;
       } else {
         SnackbarService.showInformative(

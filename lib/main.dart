@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wizard_guide/firebase_options.dart';
+import 'package:wizard_guide/src/config/initialization_app.dart';
 import 'package:wizard_guide/src/presenter/pages/login/login.dart';
 
 void main() async {
@@ -10,6 +11,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  injectDependencies();
+
   runApp(const MyApp());
 }
 

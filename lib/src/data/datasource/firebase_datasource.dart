@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wizard_guide/src/core/enums/enums.dart';
 import 'package:wizard_guide/src/domain/datasource/datasource.dart';
-import 'package:wizard_guide/src/domain/entities/user.dart';
+import 'package:wizard_guide/src/domain/entities/entities.dart';
 
 class FirebaseDatasource implements IDatasource {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -13,27 +13,34 @@ class FirebaseDatasource implements IDatasource {
 
     return UserData(
       email: 'email',
-      phoneNumber: 'phoneNumber',
+      phone: 'phoneNumber',
       dateOfBirth: DateTime.now(),
-      gender: GenderEnum.MALE,
+      gender: Gender(
+        type: GenderEnum.MALE,
+        value: 'Masculino',
+      ),
       password: 'password',
     );
   }
 
   @override
-  Future<UserData> register(String email, String password, DateTime dateOfBirth,
-      String gender) async {
+  Future<UserData> register(UserData userdata) async {
     final credential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+      email: userdata.email,
+      password: userdata.password,
+    );
 
     // TODO: Una vez creado el usuario tengo que mandar a almacenar la infor a la coleccion de usuario,
     // con el id que obtengo del registro
 
     return UserData(
       email: 'email',
-      phoneNumber: 'phoneNumber',
+      phone: 'phoneNumber',
       dateOfBirth: DateTime.now(),
-      gender: GenderEnum.MALE,
+      gender: Gender(
+        type: GenderEnum.MALE,
+        value: 'Masculino',
+      ),
       password: 'password',
     );
   }
