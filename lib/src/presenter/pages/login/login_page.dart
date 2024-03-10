@@ -29,24 +29,26 @@ class LoginPage extends GetWidget<LoginController> {
             const SizedBox(
               height: 16,
             ),
-            TextField(
-              controller: controller.passwordController,
-              decoration: InputDecoration(
-                label: const Text('Contraseña'),
-                hintText: '********',
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: () => controller.onChangePasswordObscure(),
-                  icon: Obx(
-                    () => controller.isPasswordObscure.value
-                        ? const Icon(Icons.visibility_off)
-                        : const Icon(Icons.visibility),
+            Obx(
+              () => TextField(
+                controller: controller.passwordController,
+                decoration: InputDecoration(
+                  label: const Text('Contraseña'),
+                  hintText: '********',
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    onPressed: () => controller.onChangePasswordObscure(),
+                    icon: Obx(
+                      () => controller.isPasswordObscure.value
+                          ? const Icon(Icons.visibility_off)
+                          : const Icon(Icons.visibility),
+                    ),
                   ),
                 ),
+                obscureText: controller.isPasswordObscure.value,
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.visiblePassword,
               ),
-              obscureText: controller.isPasswordObscure.value,
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.visiblePassword,
             ),
             const SizedBox(
               height: 16,
@@ -59,11 +61,12 @@ class LoginPage extends GetWidget<LoginController> {
                   width: 16,
                 ),
                 TextButton(
-                    onPressed: () => Get.to(
-                          () => const SignUpPage(),
-                          binding: SignUpBinding(),
-                        ),
-                    child: const Text('Registrarme'))
+                  onPressed: () => Get.to(
+                    () => const SignUpPage(),
+                    binding: SignUpBinding(),
+                  ),
+                  child: const Text('Registrarme'),
+                )
               ],
             ),
             const SizedBox(

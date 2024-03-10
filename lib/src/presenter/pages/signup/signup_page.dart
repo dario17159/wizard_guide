@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:wizard_guide/src/domain/entities/entities.dart';
+import 'package:wizard_guide/src/presenter/pages/signup/signup_controller.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends GetWidget<SignUpController> {
   const SignUpPage({super.key});
 
   @override
@@ -24,46 +27,44 @@ class SignUpPage extends StatelessWidget {
               style: Theme.of(context).textTheme.labelMedium,
             ),
             const SizedBox(height: 24),
-            const TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                label: Text('Email'),
-                hintText: 'example@example.com',
+            Obx(
+              () => TextField(
+                controller: controller.emailController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  label: const Text('Email'),
+                  errorText: controller.emailErrorText.value,
+                  hintText: 'example@example.com',
+                ),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.emailAddress,
               ),
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 16),
-            const TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                label: Text('Teléfono'),
-                hintText: '0000-0000',
+            Obx(
+              () => TextField(
+                controller: controller.phoneController,
+                decoration:  InputDecoration(
+                  border: const OutlineInputBorder(),
+                  label: const Text('Teléfono'),
+                  hintText: '0000-0000',
+                  errorText: controller.phoneErrorText.value
+                ),
+                inputFormatters: [controller.maskFormatter],
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.phone,
               ),
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 16),
             TextField(
-              onTap: () => showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime.now(),
-              ),
+              controller: controller.ageController,
+              onTap: () => controller.onClickDateOfBirth(context),
               canRequestFocus: false,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 label: const Text('Edad'),
                 suffixIcon: IconButton(
-                  onPressed: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
-                  },
+                  onPressed: () => controller.onClickDateOfBirth(context),
                   icon: const Icon(
                     Icons.calendar_month_rounded,
                   ),
@@ -74,15 +75,15 @@ class SignUpPage extends StatelessWidget {
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 16),
-            DropdownButtonFormField(
-              value: ['One', 'Two', 'Three', 'Four'].first,
-              onChanged: (String? value) {},
-              items:
-                  ['One', 'Two', 'Three', 'Four'].map<DropdownMenuItem<String>>(
-                (String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
+            DropdownButtonFormField<Gender>(
+              value: controller.genderSelected.value,
+              hint: const Text('Genero'),
+              onChanged: (Gender? value) => controller.onChangeGender(value),
+              items: controller.genders.map<DropdownMenuItem<Gender>>(
+                (Gender item) {
+                  return DropdownMenuItem<Gender>(
+                    value: item,
+                    child: Text(item.value),
                   );
                 },
               ).toList(),
@@ -91,25 +92,33 @@ class SignUpPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                label: const Text('Contraseña'),
-                hintText: '********',
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.visibility_off),
+            Obx(
+              () => TextField(
+                controller: controller.passwordController,
+                decoration: InputDecoration(
+                  label: const Text('Contraseña'),
+                  hintText: '********',
+                  border: const OutlineInputBorder(),
+                  errorText: controller.passwordErrorText.value,
+                  suffixIcon: IconButton(
+                    onPressed: () => controller.onChangePasswordObscure(),
+                    icon: Obx(
+                      () => controller.isPasswordObscure.value
+                          ? const Icon(Icons.visibility_off)
+                          : const Icon(Icons.visibility),
+                    ),
+                  ),
                 ),
+                obscureText: controller.isPasswordObscure.value,
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.visiblePassword,
               ),
-              obscureText: true,
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.visiblePassword,
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => controller.onClickSignUp(),
                 child: const Text('Confirmar'),
               ),
             )
