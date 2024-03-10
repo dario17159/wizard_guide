@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wizard_guide/src/core/constants/icon_routes.dart';
+import 'package:wizard_guide/src/core/enums/enums.dart';
 import 'package:wizard_guide/src/presenter/pages/home/home_controller.dart';
-import 'package:wizard_guide/src/presenter/pages/profile/profile.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -74,40 +74,41 @@ class _DrawerWidget extends GetWidget<HomeController> {
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CircleAvatar(
-                        backgroundImage: AssetImage(IconRoutes.manPNG),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'example@example.com',
-                              style: Theme.of(context).textTheme.bodyLarge,
+                  child: Obx(
+                    () => Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Hero(
+                          tag: controller.userData.value?.id ?? '',
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundImage: AssetImage(
+                              controller.userData.value?.gender.type ==
+                                      GenderEnum.MALE
+                                  ? IconRoutes.manPNG
+                                  : IconRoutes.womanPNG,
                             ),
-                            Text(
-                              '0000-0000',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
+                          ),
                         ),
-                      )
-                    ],
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Text(
+                          controller.userData.value?.email ?? '',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        Text(
+                          controller.userData.value?.phone ?? '',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.person),
                   title: const Text('Perfil'),
-                  onTap: () => Get.to(
-                    () => const ProfilePage(),
-                    binding: ProfileBinding(),
-                  ),
+                  onTap: () => controller.onClickProfile(),
                 ),
                 ListTile(
                   leading: const Icon(Icons.exit_to_app_rounded),

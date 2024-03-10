@@ -41,4 +41,21 @@ class UserModel {
       if (dateOfBirth != null) "dateOfBirth": dateOfBirth,
     };
   }
+
+  UserModel copyWith({
+    String? email,
+    String? uid,
+    String? phone,
+    String? status,
+    String? gender,
+    Timestamp? dateOfBirth,
+  }) =>
+      UserModel(
+        email: email ?? this.email,
+        uid: uid ?? this.uid,
+        phone: phone ?? this.phone,
+        status: status ?? this.status,
+        gender: gender ?? this.gender,
+        dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      );
 }

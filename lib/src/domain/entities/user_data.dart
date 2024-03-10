@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:wizard_guide/src/domain/entities/entities.dart';
 import 'package:wizard_guide/src/domain/entities/gender.dart';
 
 class UserData {
@@ -33,4 +36,25 @@ class UserData {
         id: id ?? this.id,
         password: '',
       );
+
+  factory UserData.fromRawJson(String str) =>
+      UserData.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+        id: json["id"],
+        email: json["email"],
+        phone: json["phone"],
+        dateOfBirth: DateTime.parse(json["dateOfBirth"]),
+        gender: Gender.fromRawJson(json["gender"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "email": email,
+        "phone": phone,
+        "dateOfBirth": dateOfBirth.toIso8601String(),
+        "gender": gender.toRawJson(),
+      };
 }

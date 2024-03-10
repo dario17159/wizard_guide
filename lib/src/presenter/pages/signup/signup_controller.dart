@@ -121,12 +121,12 @@ class SignUpController extends GetxController {
           gender: genderSelected.value!,
           phone: phoneController.text.trim(),
         );
-        final data = await _apiRepository.register(userData);
+        await _apiRepository.register(userData);
         DialogService.hideLoading();
 
         SnackbarService.showSuccess(
           title: 'Enhorabuena',
-          message: 'Bienvenid@ ${data.email}! 🍻',
+          message: 'Bienvenid@ ${emailController.text.trim()}! 🍻',
         );
 
         Get.offAll(
@@ -140,6 +140,7 @@ class SignUpController extends GetxController {
         );
       }
     } catch (e) {
+      DialogService.hideLoading();
       SnackbarService.showError(
         title: 'Atención',
         message: 'Ocurrió un error, verifique su conexión a internet',

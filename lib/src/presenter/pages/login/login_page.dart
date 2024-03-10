@@ -16,15 +16,17 @@ class LoginPage extends GetWidget<LoginController> {
         child: Column(
           children: [
             SvgPicture.asset(IconRoutes.loginSVG),
-            TextField(
-              controller: controller.emailController,
-              decoration: const InputDecoration(
-                label: Text('Email'),
-                hintText: 'example@example.com',
-                border: OutlineInputBorder(),
+            Obx(
+              () => TextField(
+                controller: controller.emailController,
+                decoration: InputDecoration(
+                    label: const Text('Email'),
+                    hintText: 'example@example.com',
+                    border: const OutlineInputBorder(),
+                    errorText: controller.emailErrorText.value),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.emailAddress,
               ),
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(
               height: 16,
