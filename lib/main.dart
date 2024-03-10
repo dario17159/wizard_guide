@@ -20,8 +20,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Wizard Guide',
+      debugShowCheckedModeBanner: false,
       home: const LoginPage(),
       initialBinding: LoginBinding(),
+      theme: ThemeData(
+        colorSchemeSeed: const Color(0xFF1A3E6D),
+      ),
     );
   }
 }
