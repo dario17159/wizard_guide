@@ -1,4 +1,4 @@
-import 'package:wizard_guide/src/core/enums/task_status.dart';
+import 'package:wizard_guide/src/core/enums/task_status_enum.dart';
 
 class Task {
   final String title;

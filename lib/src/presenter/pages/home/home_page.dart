@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wizard_guide/src/core/constants/icon_routes.dart';
-import 'package:wizard_guide/src/presenter/pages/login/login.dart';
+import 'package:wizard_guide/src/presenter/pages/home/home_controller.dart';
 import 'package:wizard_guide/src/presenter/pages/profile/profile.dart';
 
 class HomePage extends StatelessWidget {
@@ -60,7 +60,7 @@ class _BottomBarWidget extends StatelessWidget {
   }
 }
 
-class _DrawerWidget extends StatelessWidget {
+class _DrawerWidget extends GetWidget<HomeController> {
   const _DrawerWidget();
 
   @override
@@ -74,18 +74,6 @@ class _DrawerWidget extends StatelessWidget {
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
-                  decoration: const BoxDecoration(
-                      // gradient: LinearGradient(
-                      //   begin: Alignment.topCenter,
-                      //   end: Alignment.bottomCenter,
-                      //   colors: [
-                      //     Color(0xFF1A3E6D),
-                      //     // Colors.white
-                      //     Color(0xffF2F3FB),
-                      //     // Color(0xffF17A24),
-                      //   ],
-                      // ),
-                      ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -124,10 +112,7 @@ class _DrawerWidget extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.exit_to_app_rounded),
                   title: const Text('Cerrar sesión'),
-                  onTap: () => Get.offAll(
-                    () => const LoginPage(),
-                    binding: LoginBinding(),
-                  ),
+                  onTap: () => controller.onClickLogout(),
                 ),
               ],
             ),

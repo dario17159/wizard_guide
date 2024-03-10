@@ -3,19 +3,20 @@ import 'package:get/get.dart';
 
 class SnackbarService {
   static void showSuccess(
-      {String title = 'title', String message = 'Message'}) {
+      {String title = 'title',
+      String message = 'Message',
+      SnackPosition position = SnackPosition.BOTTOM}) {
     Get.snackbar(
       title,
       message,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: position,
       margin: const EdgeInsets.all(20),
       colorText: Colors.white,
       backgroundColor: Colors.green,
     );
   }
 
-  static void showError(
-      {String title = 'title', String message = 'Message'}) {
+  static void showError({String title = 'title', String message = 'Message'}) {
     Get.snackbar(
       title,
       message,

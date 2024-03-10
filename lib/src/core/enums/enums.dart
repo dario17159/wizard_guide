@@ -1,2 +1,2 @@
-export './gender.dart';
-export './task_status.dart';
+export 'gender_enum.dart';
+export 'task_status_enum.dart';

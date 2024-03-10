@@ -9,6 +9,7 @@ import 'package:wizard_guide/src/core/services/services.dart';
 import 'package:wizard_guide/src/data/repositories/api_repository_impl.dart';
 import 'package:wizard_guide/src/domain/entities/entities.dart';
 import 'package:wizard_guide/src/domain/repositories/api_repository.dart';
+import 'package:wizard_guide/src/presenter/pages/home/home.dart';
 
 class SignUpController extends GetxController {
   final IApiRepository _apiRepository = Get.find<ApiRepositoryImpl>();
@@ -106,25 +107,42 @@ class SignUpController extends GetxController {
   }
 
   Future<void> onClickSignUp() async {
-    if (_ageValid &&
-        _emailValid &&
-        _passwordValid &&
-        _phoneValid &&
-        genderSelected.value != null) {
-      DialogService.showLoading(message: 'Aguarde un momento...');
-      final userData = UserData(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-        dateOfBirth: dateOfBirth!,
-        gender: genderSelected.value!,
-        phone: phoneController.text.trim(),
-      );
-      final data = _apiRepository.register(userData);
-      DialogService.hideLoading();
-    } else {
-      SnackbarService.showInformative(
+    try {
+      if (_ageValid &&
+          _emailValid &&
+          _passwordValid &&
+          _phoneValid &&
+          genderSelected.value != null) {
+        DialogService.showLoading(message: 'Aguarde un momento...');
+        final userData = UserData(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          dateOfBirth: dateOfBirth!,
+          gender: genderSelected.value!,
+          phone: phoneController.text.trim(),
+        );
+        final data = await _apiRepository.register(userData);
+        DialogService.hideLoading();
+
+        SnackbarService.showSuccess(
+          title: 'Enhorabuena',
+          message: 'Bienvenid@ ${data.email}! 🍻',
+        );
+
+        Get.offAll(
+          () => const HomePage(),
+          binding: HomeBinding(),
+        );
+      } else {
+        SnackbarService.showInformative(
+          title: 'Atención',
+          message: 'Verifique que los campos esten completos correctamente',
+        );
+      }
+    } catch (e) {
+      SnackbarService.showError(
         title: 'Atención',
-        message: 'Verifique que los campos esten completos correctamente',
+        message: 'Ocurrió un error, verifique su conexión a internet',
       );
     }
   }

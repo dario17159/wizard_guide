@@ -16,4 +16,7 @@ class ApiRepositoryImpl implements IApiRepository {
   @override
   Future<UserData> register(UserData userData) =>
       _datasource.register(userData);
+
+  @override
+  Future<void> logout() => _datasource.logout();
 }
