@@ -42,21 +42,24 @@ class AddPage extends GetWidget<AddController> {
             ),
             const SizedBox(height: 8),
             Obx(
-              () => ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: controller.image.value == null
-                    ? Image.asset(
-                        IconRoutes.placeHolderWEBP,
-                        width: size.width,
-                        height: size.width,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.file(
-                        controller.image.value!,
-                        width: size.width,
-                        height: size.width,
-                        fit: BoxFit.cover,
-                      ),
+              () => AspectRatio(
+                aspectRatio: 1.1,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: controller.image.value == null
+                      ? Image.asset(
+                          IconRoutes.placeHolderWEBP,
+                          width: size.width,
+                          height: size.width,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.file(
+                          controller.image.value!,
+                          width: size.width,
+                          height: size.width,
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
             ),
             const SizedBox(
@@ -76,6 +79,7 @@ class AddPage extends GetWidget<AddController> {
             ),
             const SizedBox(height: 16),
             TextField(
+              focusNode: controller.titleFocus,
               controller: controller.titleController,
               textCapitalization: TextCapitalization.sentences,
               textInputAction: TextInputAction.next,

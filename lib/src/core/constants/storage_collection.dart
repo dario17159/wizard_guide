@@ -1,6 +1,6 @@
+// ignore_for_file: constant_identifier_names
+
 class StorageCollection {
   static const String USERS = 'users';
-  static const String TASKS_PENDING = 'tasksPending';
-  static const String TASKS_IN_PROGRESS = 'tasksInProgress';
-  static const String TASKS_FINISHED = 'tasksFinished';
+  static const String TASKS = 'tasks';
 }

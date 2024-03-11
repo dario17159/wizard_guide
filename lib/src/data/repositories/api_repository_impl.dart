@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'package:wizard_guide/src/core/constants/constants.dart';
+import 'package:wizard_guide/src/core/enums/enums.dart';
 import 'package:wizard_guide/src/core/services/services.dart';
 import 'package:wizard_guide/src/data/datasource/firebase_datasource.dart';
 import 'package:wizard_guide/src/data/mappers/mappers.dart';
 import 'package:wizard_guide/src/domain/datasource/datasource.dart';
+import 'package:wizard_guide/src/domain/entities/task_data.dart';
 import 'package:wizard_guide/src/domain/entities/user_data.dart';
 import 'package:wizard_guide/src/domain/repositories/api_repository.dart';
 
@@ -32,4 +34,18 @@ class ApiRepositoryImpl implements IApiRepository {
 // Podriamos hacer que el storage se limpe, eso va del lado de lo que requiera el negocio
   @override
   Future<void> logout() => _datasource.logout();
+
+  @override
+  Future<void> addTask(TaskData task) => _datasource.addTask(task);
+
+  @override
+  Future<void> deleteTask(String id) => _datasource.deleteTask(id);
+
+  @override
+  Stream<List<TaskData>> getTask(TaskStatusENUM type) =>
+      _datasource.getTask(type).map(
+          (listModel) => listModel.map((e) => TaskMapper.toEntity(e)).toList());
+
+  @override
+  Future<void> updateTask(TaskData task) => _datasource.updateTask(task);
 }

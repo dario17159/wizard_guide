@@ -8,9 +8,10 @@ class TaskCard extends StatelessWidget {
     required this.task,
   });
   final VoidCallback onPressed;
-  final Task task;
+  final TaskData task;
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
@@ -34,10 +35,16 @@ class TaskCard extends StatelessWidget {
                     const SizedBox(
                       height: 12,
                     ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image(
-                        image: NetworkImage(task.imageUrl),
+                    AspectRatio(
+                      aspectRatio: 1.1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image(
+                          image: NetworkImage(task.imageUrl),
+                          width: size.width,
+                          height: size.width,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ],

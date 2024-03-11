@@ -3,8 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wizard_guide/src/core/enums/enums.dart';
+import 'package:wizard_guide/src/core/services/dialog_service.dart';
 import 'package:wizard_guide/src/core/services/snackbar_service.dart';
 import 'package:wizard_guide/src/data/repositories/api_repository_impl.dart';
+import 'package:wizard_guide/src/domain/entities/task_data.dart';
+import 'package:wizard_guide/src/domain/entities/task_status.dart';
 import 'package:wizard_guide/src/domain/repositories/api_repository.dart';
 
 class AddController extends GetxController {
@@ -15,11 +19,13 @@ class AddController extends GetxController {
 
   final ImagePicker _imagePicker = ImagePicker();
   final Rx<File?> image = Rx<File?>(null);
+  final FocusNode titleFocus = FocusNode();
 
   @override
   void onClose() {
     titleController.dispose();
     descriptionController.dispose();
+    titleFocus.dispose();
     super.onClose();
   }
 
@@ -27,9 +33,29 @@ class AddController extends GetxController {
     try {
       if (titleController.text.isNotEmpty &&
           descriptionController.text.isNotEmpty) {
-
-          }
+        DialogService.showLoading(message: 'Agregando tarea...');
+        final taskData = TaskData(
+            title: titleController.text.trim(),
+            description: descriptionController.text.trim(),
+            imageUrl: '',
+            status: TaskStatus(value: 'Pendiente', type: TaskStatusENUM.PENDING),
+            imageFile: image.value);
+        await _apiRepository.addTask(taskData);
+        _resetFieldValues();
+        DialogService.hideLoading();
+        SnackbarService.showSuccess(
+          title: 'Enhorabuena',
+          message: 'La tarea se a almacenado correctamente',
+          position: SnackPosition.TOP,
+        );
+      } else {
+        SnackbarService.showInformative(
+          title: 'Atención',
+          message: 'Revisa que todos los campos requeridos esten completos',
+        );
+      }
     } catch (e) {
+      DialogService.hideLoading();
       SnackbarService.showError(
         title: 'Atención',
         message:
@@ -94,4 +120,11 @@ class AddController extends GetxController {
   }
 
   void onClickDeleteImage() => image.value = null;
+
+  void _resetFieldValues() {
+    titleController.clear();
+    descriptionController.clear();
+    image.value = null;
+    titleFocus.requestFocus();
+  }
 }

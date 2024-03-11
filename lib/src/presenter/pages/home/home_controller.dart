@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wizard_guide/src/core/constants/constants.dart';
+import 'package:wizard_guide/src/core/enums/enums.dart';
 import 'package:wizard_guide/src/core/services/services.dart';
 import 'package:wizard_guide/src/data/repositories/api_repository_impl.dart';
 import 'package:wizard_guide/src/domain/entities/entities.dart';
@@ -14,9 +15,16 @@ class HomeController extends GetxController {
   RxInt currentPageIndex = 0.obs;
   final PageController pageController = PageController(initialPage: 0);
 
+  RxList<TaskData> taskPendingList = <TaskData>[].obs;
+  RxList<TaskData> taskInProgressList = <TaskData>[].obs;
+  RxList<TaskData> taskFinishedList = <TaskData>[].obs;
+
   @override
   void onInit() {
     _loadUserData();
+    taskPendingList.bindStream(_apiRepository.getTask(TaskStatusENUM.PENDING));
+    taskInProgressList.bindStream(_apiRepository.getTask(TaskStatusENUM.IN_PROGRESS));
+    taskFinishedList.bindStream(_apiRepository.getTask(TaskStatusENUM.FINISHED));
     pageController.addListener(_scrollListener);
     super.onInit();
   }
@@ -57,7 +65,11 @@ class HomeController extends GetxController {
 
   void onClickBottomItem(int page) {
     currentPageIndex.value = page;
-    pageController.animateToPage(page, duration:const Duration(milliseconds: 300),curve: Curves.easeIn,);
+    pageController.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeIn,
+    );
   }
 
   @override

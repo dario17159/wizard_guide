@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wizard_guide/src/core/constants/storage_collection.dart';
-import 'package:wizard_guide/src/data/mappers/user_mapper.dart';
+import 'package:wizard_guide/src/core/enums/enums.dart';
+import 'package:wizard_guide/src/data/mappers/mappers.dart';
+import 'package:wizard_guide/src/data/models/task_model.dart';
 import 'package:wizard_guide/src/data/models/user_model.dart';
 import 'package:wizard_guide/src/domain/datasource/datasource.dart';
 import 'package:wizard_guide/src/domain/entities/entities.dart';
@@ -10,7 +13,8 @@ import 'package:wizard_guide/src/domain/entities/entities.dart';
 class FirebaseDatasource implements IDatasource {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  final Reference _firebaseStorage = FirebaseStorage.instance.ref();
+  final Uuid _uuid = const Uuid();
 
   @override
   Future<UserModel> login(String email, String password) async {
@@ -20,7 +24,7 @@ class FirebaseDatasource implements IDatasource {
         .collection(StorageCollection.USERS)
         .withConverter(
           fromFirestore: UserModel.fromFirestore,
-          toFirestore: (UserModel city, options) => city.toFirestore(),
+          toFirestore: (UserModel user, options) => user.toFirestore(),
         )
         .doc(credential.user!.uid)
         .get();
@@ -40,7 +44,7 @@ class FirebaseDatasource implements IDatasource {
         .collection(StorageCollection.USERS)
         .withConverter(
           fromFirestore: UserModel.fromFirestore,
-          toFirestore: (UserModel city, options) => city.toFirestore(),
+          toFirestore: (UserModel user, options) => user.toFirestore(),
         )
         .doc(credential.user!.uid)
         .set(userModel);
@@ -50,5 +54,106 @@ class FirebaseDatasource implements IDatasource {
   @override
   Future<void> logout() async {
     await _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<void> addTask(TaskData task) async {
+    String urlImage = '';
+    String imageName = '';
+    if (task.imageFile != null) {
+      // Subir imagen al storage
+      imageName = _uuid.v4();
+      final imageRef = _firebaseStorage.child('task/$imageName.jpg');
+      await imageRef.putFile(
+        task.imageFile!,
+        SettableMetadata(
+          contentType: "image/jpeg",
+        ),
+      );
+      urlImage = await imageRef.getDownloadURL();
+    }
+
+    final taskData = task.copyWith(imageUrl: urlImage, imageName: imageName);
+
+    final taskModel = TaskMapper.toModel(taskData);
+
+    await _firebaseFirestore
+        .collection(StorageCollection.TASKS)
+        .withConverter(
+          fromFirestore: TaskModel.fromFirestore,
+          toFirestore: (TaskModel task, options) => task.toFirestore(),
+        )
+        .doc()
+        .set(taskModel);
+  }
+
+  @override
+  Future<void> deleteTask(String id) async {
+    final docRef = _firebaseFirestore
+        .collection(StorageCollection.TASKS)
+        .withConverter(
+          fromFirestore: TaskModel.fromFirestore,
+          toFirestore: (TaskModel task, options) => task.toFirestore(),
+        )
+        .doc(id);
+    final taskModel = (await docRef.get()).data()!;
+    if (taskModel.urlImage?.isNotEmpty ?? false) {
+      final imageRef =
+          _firebaseStorage.child('task/${taskModel.imageName}.jpg');
+      await imageRef.delete();
+    }
+    await docRef.delete();
+  }
+
+  @override
+  Stream<List<TaskModel>> getTask(TaskStatusENUM type) {
+    List<TaskModel> taskList = [];
+    Stream<QuerySnapshot> snapshots = _firebaseFirestore
+        .collection(StorageCollection.TASKS)
+        .withConverter(
+          fromFirestore: TaskModel.fromFirestore,
+          toFirestore: (TaskModel task, _) => task.toFirestore(),
+        )
+        .where('status', isEqualTo: toTaskString[type])
+        .snapshots();
+    snapshots.listen((QuerySnapshot query) async {
+      if (query.docChanges.isNotEmpty) {
+        taskList.clear();
+      }
+    });
+    return snapshots.map((snapshot) {
+      for (var messageData in snapshot.docs) {
+        taskList.add(messageData.data()! as TaskModel);
+      }
+      return taskList.toList();
+    });
+  }
+
+  @override
+  Future<void> updateTask(TaskData task) async {
+    String urlImage = '';
+    if (task.imageFile != null) {
+      final imageRef = _firebaseStorage.child('task/${_uuid.v4()}.jpg');
+      await imageRef.putFile(
+        task.imageFile!,
+        SettableMetadata(
+          contentType: "image/jpeg",
+        ),
+      );
+      urlImage = await imageRef.getDownloadURL();
+    }
+
+    final taskData = task.copyWith(imageUrl: urlImage);
+
+    final taskModel = TaskMapper.toModel(taskData);
+
+    await _firebaseFirestore
+        .collection(StorageCollection.TASKS)
+        .withConverter(
+          fromFirestore: TaskModel.fromFirestore,
+          toFirestore: (TaskModel task, options) => task.toFirestore(),
+        )
+        .doc(task.id)
+        .update(taskModel.toFirestore());
   }
 }
