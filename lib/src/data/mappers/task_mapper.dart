@@ -9,6 +9,7 @@ class TaskMapper {
         title: taskModel.title ?? '',
         description: taskModel.description ?? '',
         imageUrl: taskModel.urlImage ?? '',
+        blurHash: taskModel.blurHash ?? '',
         status: TaskStatusMapper.toEntity(taskModel.status ?? ''),
       );
 
@@ -17,6 +18,7 @@ class TaskMapper {
         title: taskData.title,
         description: taskData.description,
         urlImage: taskData.imageUrl,
+        blurHash: taskData.blurHash,
         status: toTaskString[taskData.status.type],
       );
 }

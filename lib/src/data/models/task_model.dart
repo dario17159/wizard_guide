@@ -5,6 +5,7 @@ class TaskModel {
   final String? title;
   final String? description;
   final String? urlImage;
+  final String? blurHash;
   final String? status;
   final String? imageName;
 
@@ -13,6 +14,7 @@ class TaskModel {
     this.title,
     this.description,
     this.urlImage,
+    this.blurHash,
     this.status,
     this.imageName,
   });
@@ -27,6 +29,7 @@ class TaskModel {
       title: data?['title'],
       description: data?['description'],
       urlImage: data?['urlImage'],
+      blurHash: data?['blurHash'],
       status: data?['status'],
       imageName: data?['imageName'],
     );
@@ -37,6 +40,7 @@ class TaskModel {
       if (title != null) "title": title,
       if (description != null) "description": description,
       if (urlImage != null) "urlImage": urlImage,
+      if (blurHash != null) "blurHash": blurHash,
       if (status != null) "status": status,
       if (imageName != null) "imageName": imageName,
     };
@@ -47,6 +51,7 @@ class TaskModel {
     String? title,
     String? description,
     String? urlImage,
+    String? blurHash,
     String? status,
   }) =>
       TaskModel(
@@ -54,6 +59,7 @@ class TaskModel {
         title: title ?? this.title,
         description: description ?? this.description,
         urlImage: urlImage ?? this.urlImage,
+        blurHash: blurHash ?? this.blurHash,
         status: status ?? this.status,
         imageName: imageName ?? imageName,
       );

@@ -35,16 +35,18 @@ class TaskCard extends StatelessWidget {
                     const SizedBox(
                       height: 12,
                     ),
-                    AspectRatio(
-                      aspectRatio: 1.1,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image(
-                          image: NetworkImage(task.imageUrl),
-                          width: size.width,
-                          height: size.width,
-                          fit: BoxFit.cover,
-                        ),
+                    Hero(
+                      tag: task.id,
+                      child: AspectRatio(
+                        aspectRatio: 1.1,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              task.imageUrl,
+                              width: size.width,
+                              height: size.width,
+                              fit: BoxFit.cover,
+                            )),
                       ),
                     ),
                   ],

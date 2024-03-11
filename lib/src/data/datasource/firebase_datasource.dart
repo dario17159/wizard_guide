@@ -1,6 +1,8 @@
+import 'package:blurhash_ffi/blurhash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wizard_guide/src/core/constants/storage_collection.dart';
 import 'package:wizard_guide/src/core/enums/enums.dart';
@@ -60,6 +62,7 @@ class FirebaseDatasource implements IDatasource {
   Future<void> addTask(TaskData task) async {
     String urlImage = '';
     String imageName = '';
+    String blurHash = '';
     if (task.imageFile != null) {
       // Subir imagen al storage
       imageName = _uuid.v4();
@@ -71,14 +74,19 @@ class FirebaseDatasource implements IDatasource {
         ),
       );
       urlImage = await imageRef.getDownloadURL();
+      blurHash = await BlurhashFFI.encode(FileImage(task.imageFile!));
     }
 
-    final taskData = task.copyWith(imageUrl: urlImage, imageName: imageName);
+    final taskData = task.copyWith(
+      imageUrl: urlImage,
+      imageName: imageName,
+      blurHash: blurHash,
+    );
 
     final taskModel = TaskMapper.toModel(taskData);
-
+    final uid = _firebaseAuth.currentUser!.uid;
     await _firebaseFirestore
-        .collection(StorageCollection.TASKS)
+        .collection(StorageCollection.TASKS + uid)
         .withConverter(
           fromFirestore: TaskModel.fromFirestore,
           toFirestore: (TaskModel task, options) => task.toFirestore(),
@@ -89,8 +97,9 @@ class FirebaseDatasource implements IDatasource {
 
   @override
   Future<void> deleteTask(String id) async {
+    final uid = _firebaseAuth.currentUser!.uid;
     final docRef = _firebaseFirestore
-        .collection(StorageCollection.TASKS)
+        .collection(StorageCollection.TASKS + uid)
         .withConverter(
           fromFirestore: TaskModel.fromFirestore,
           toFirestore: (TaskModel task, options) => task.toFirestore(),
@@ -108,8 +117,9 @@ class FirebaseDatasource implements IDatasource {
   @override
   Stream<List<TaskModel>> getTask(TaskStatusENUM type) {
     List<TaskModel> taskList = [];
+    final uid = _firebaseAuth.currentUser!.uid;
     Stream<QuerySnapshot> snapshots = _firebaseFirestore
-        .collection(StorageCollection.TASKS)
+        .collection(StorageCollection.TASKS + uid)
         .withConverter(
           fromFirestore: TaskModel.fromFirestore,
           toFirestore: (TaskModel task, _) => task.toFirestore(),
@@ -131,24 +141,10 @@ class FirebaseDatasource implements IDatasource {
 
   @override
   Future<void> updateTask(TaskData task) async {
-    String urlImage = '';
-    if (task.imageFile != null) {
-      final imageRef = _firebaseStorage.child('task/${_uuid.v4()}.jpg');
-      await imageRef.putFile(
-        task.imageFile!,
-        SettableMetadata(
-          contentType: "image/jpeg",
-        ),
-      );
-      urlImage = await imageRef.getDownloadURL();
-    }
-
-    final taskData = task.copyWith(imageUrl: urlImage);
-
-    final taskModel = TaskMapper.toModel(taskData);
-
+    final taskModel = TaskMapper.toModel(task);
+    final uid = _firebaseAuth.currentUser!.uid;
     await _firebaseFirestore
-        .collection(StorageCollection.TASKS)
+        .collection(StorageCollection.TASKS + uid)
         .withConverter(
           fromFirestore: TaskModel.fromFirestore,
           toFirestore: (TaskModel task, options) => task.toFirestore(),

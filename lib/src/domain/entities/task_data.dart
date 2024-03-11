@@ -7,6 +7,7 @@ class TaskData {
   final String title;
   final String description;
   final String imageUrl;
+  final String blurHash;
   final TaskStatus status;
   final File? imageFile;
   final String imageName;
@@ -16,6 +17,7 @@ class TaskData {
     required this.title,
     required this.description,
     required this.imageUrl,
+    this.blurHash = '',
     required this.status,
     this.imageFile,
     this.imageName = '',
@@ -26,6 +28,7 @@ class TaskData {
     String? title,
     String? description,
     String? imageUrl,
+    String? blurHash,
     TaskStatus? status,
     String? imageName,
   }) =>
@@ -34,6 +37,7 @@ class TaskData {
         title: title ?? this.title,
         description: description ?? this.description,
         imageUrl: imageUrl ?? this.imageUrl,
+        blurHash: blurHash ?? this.blurHash,
         status: status ?? this.status,
         imageName: imageName ?? this.imageName,
       );

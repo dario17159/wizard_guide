@@ -41,7 +41,7 @@ class DetailPage extends GetWidget<DetailController> {
                         child: Text(item.value),
                       ))
                   .toList(),
-              onChanged: (value) {},
+              onChanged: (value) => controller.onChangeStatus(value),
             ),
             const SizedBox(height: 24),
             Obx(
@@ -69,23 +69,26 @@ class _ImageContainer extends GetWidget<DetailController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return AspectRatio(
-      aspectRatio: 1.1,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: controller.task.imageUrl.isNotEmpty
-            ? Image.network(
-                controller.task.imageUrl,
-                width: size.width,
-                height: size.width,
-                fit: BoxFit.cover,
-              )
-            : Image.asset(
-                IconRoutes.placeHolderWEBP,
-                width: size.width,
-                height: size.width,
-                fit: BoxFit.cover,
-              ),
+    return Hero(
+      tag: controller.task.id,
+      child: AspectRatio(
+        aspectRatio: 1.1,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: controller.task.imageUrl.isNotEmpty
+              ? Image.network(
+                  controller.task.imageUrl,
+                  width: size.width,
+                  height: size.width,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  IconRoutes.placeHolderWEBP,
+                  width: size.width,
+                  height: size.width,
+                  fit: BoxFit.cover,
+                ),
+        ),
       ),
     );
   }

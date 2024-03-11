@@ -28,7 +28,7 @@ class DetailController extends GetxController {
     titleController.text = task.title;
     descriptionController.text = task.description;
     statusSelected.value =
-        statusList.firstWhere((element) => element.type == task.status.type);
+        statusList.where((element) => element.value == task.status.value).first;
     super.onInit();
   }
 
@@ -71,6 +71,6 @@ class DetailController extends GetxController {
 
   void onChangeStatus(TaskStatus? status) {
     statusSelected.value = status;
-    canUpdate.value = (task.status != status);
+    canUpdate.value = (task.status.type != status!.type);
   }
 }

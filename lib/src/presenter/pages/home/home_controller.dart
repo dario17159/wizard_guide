@@ -23,8 +23,10 @@ class HomeController extends GetxController {
   void onInit() {
     _loadUserData();
     taskPendingList.bindStream(_apiRepository.getTask(TaskStatusENUM.PENDING));
-    taskInProgressList.bindStream(_apiRepository.getTask(TaskStatusENUM.IN_PROGRESS));
-    taskFinishedList.bindStream(_apiRepository.getTask(TaskStatusENUM.FINISHED));
+    taskInProgressList
+        .bindStream(_apiRepository.getTask(TaskStatusENUM.IN_PROGRESS));
+    taskFinishedList
+        .bindStream(_apiRepository.getTask(TaskStatusENUM.FINISHED));
     pageController.addListener(_scrollListener);
     super.onInit();
   }
@@ -74,6 +76,9 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    taskPendingList.close();
+    taskInProgressList.close();
+    taskFinishedList.close();
     pageController.removeListener(_scrollListener);
     pageController.dispose();
     super.onClose();
