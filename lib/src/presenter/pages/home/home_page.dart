@@ -2,34 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wizard_guide/src/core/constants/icon_routes.dart';
 import 'package:wizard_guide/src/core/enums/enums.dart';
+import 'package:wizard_guide/src/presenter/pages/add/add.dart';
 import 'package:wizard_guide/src/presenter/pages/home/home_controller.dart';
+import 'package:wizard_guide/src/presenter/pages/home/views/views.dart';
 
 class HomePage extends GetWidget<HomeController> {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const _DrawerWidget(),
-      appBar: AppBar(
-        // automaticallyImplyLeading: false,
-        title: const Text('Wizard Guide'),
+    return Obx(
+      () => Scaffold(
+        drawer: const _DrawerWidget(),
+        appBar: AppBar(
+          // automaticallyImplyLeading: false,
+          title: const Text('Wizard Guide'),
+        ),
+        body: PageView(
+          controller: controller.pageController,
+          children: const [
+            PendingTaskPage(),
+            InProgressTaskPage(),
+            FinishedTaskPage(),
+          ],
+        ),
+        floatingActionButton: controller.currentPageIndex.value == 0
+            ? FloatingActionButton(
+                onPressed: () => Get.to(()=> const AddPage(), binding: AddBinding()),
+                child: const Icon(Icons.post_add),
+              )
+            : null,
+        bottomNavigationBar: const _BottomBarWidget(),
       ),
-      body: PageView(
-        controller: controller.pageController,
-        children: [
-          Container(
-            color: Colors.red,
-          ),
-          Container(
-            color: Colors.blue,
-          ),
-          Container(
-            color: Colors.green,
-          ),
-        ],
-      ),
-      bottomNavigationBar: const _BottomBarWidget(),
     );
   }
 }

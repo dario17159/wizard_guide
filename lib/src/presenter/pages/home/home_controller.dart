@@ -57,7 +57,7 @@ class HomeController extends GetxController {
 
   void onClickBottomItem(int page) {
     currentPageIndex.value = page;
-    pageController.jumpToPage(page);
+    pageController.animateToPage(page, duration:const Duration(milliseconds: 300),curve: Curves.easeIn,);
   }
 
   @override

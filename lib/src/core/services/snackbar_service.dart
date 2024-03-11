@@ -16,11 +16,14 @@ class SnackbarService {
     );
   }
 
-  static void showError({String title = 'title', String message = 'Message'}) {
+  static void showError(
+      {String title = 'title',
+      String message = 'Message',
+      SnackPosition position = SnackPosition.BOTTOM}) {
     Get.snackbar(
       title,
       message,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: position,
       margin: const EdgeInsets.all(20),
       colorText: Colors.white,
       backgroundColor: Colors.red,

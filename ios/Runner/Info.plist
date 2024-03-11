@@ -23,7 +23,7 @@
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>LSRequiresIPhoneOS</key>
-		<true/>
+		<true />
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
@@ -42,12 +42,16 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
-		<true/>
+		<true />
 		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true/>
-		<key>UIStatusBarHidden</key>
-		<true/>
+		<true />
+		<key>NSCameraUsageDescription</key>
+		<string>Necesito usar la camara para poder cargar imagenes a la tarea</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Usado por si quiero almacenar un video en la tarea</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Necesito usar la camara para poder cargar imagenes a la tarea</string>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
-		<false/>
+		<false />
 	</dict>
 </plist>
