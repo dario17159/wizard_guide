@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:wizard_guide/firebase_options.dart';
 import 'package:wizard_guide/src/config/initialization_app.dart';
@@ -37,6 +38,10 @@ class MyApp extends StatelessWidget {
       theme: lightTheme(Theme.of(context).textTheme),
       darkTheme: darkTheme(Theme.of(context).textTheme),
       themeMode: ThemeMode.system,
+      localizationsDelegates: const [...GlobalMaterialLocalizations.delegates],
+      supportedLocales: const [
+        Locale('es'),
+      ],
     );
   }
 }

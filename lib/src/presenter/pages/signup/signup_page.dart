@@ -44,12 +44,11 @@ class SignUpPage extends GetWidget<SignUpController> {
             Obx(
               () => TextField(
                 controller: controller.phoneController,
-                decoration:  InputDecoration(
-                  border: const OutlineInputBorder(),
-                  label: const Text('Teléfono'),
-                  hintText: '0000-0000',
-                  errorText: controller.phoneErrorText.value
-                ),
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    label: const Text('Teléfono'),
+                    hintText: '0000-0000',
+                    errorText: controller.phoneErrorText.value),
                 inputFormatters: [controller.maskFormatter],
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.phone,
@@ -57,12 +56,12 @@ class SignUpPage extends GetWidget<SignUpController> {
             ),
             const SizedBox(height: 16),
             TextField(
-              controller: controller.ageController,
+              controller: controller.dateOfBirthController,
               onTap: () => controller.onClickDateOfBirth(context),
               canRequestFocus: false,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                label: const Text('Edad'),
+                label: const Text('Fecha de Nacimiento'),
                 suffixIcon: IconButton(
                   onPressed: () => controller.onClickDateOfBirth(context),
                   icon: const Icon(
@@ -72,7 +71,20 @@ class SignUpPage extends GetWidget<SignUpController> {
               ),
               readOnly: true,
               textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.phone,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: controller.ageController,
+              canRequestFocus: false,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                label: Text('Edad'),
+              ),
+              readOnly: true,
+              enableSuggestions: false,
+              enableInteractiveSelection: false,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<Gender>(

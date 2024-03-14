@@ -17,6 +17,7 @@ class SignUpController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
+  final TextEditingController dateOfBirthController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   final MaskTextInputFormatter maskFormatter = MaskTextInputFormatter(
@@ -59,6 +60,7 @@ class SignUpController extends GetxController {
     emailController.dispose();
     phoneController.dispose();
     ageController.dispose();
+    dateOfBirthController.dispose();
     passwordController.dispose();
     super.onClose();
   }
@@ -151,6 +153,9 @@ class SignUpController extends GetxController {
   Future<void> onClickDateOfBirth(BuildContext context) async {
     dateOfBirth = await showDatePicker(
       context: context,
+      confirmText: 'Aceptar',
+      helpText: 'Seleccione la fecha de nacimiento',
+      locale: const Locale('es','ES'),
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
@@ -158,6 +163,7 @@ class SignUpController extends GetxController {
 
     if (dateOfBirth != null) {
       if (dateOfBirth!.parseToAge >= 10) {
+        dateOfBirthController.text = dateOfBirth!.formatToShow;
         ageController.text = dateOfBirth!.parseToAge.toString();
         _ageValid = true;
       } else {

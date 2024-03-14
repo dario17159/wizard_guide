@@ -38,11 +38,14 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_blurhash: ^0.8.2
+  flutter_localizations:
+    sdk: flutter
   flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.10+1
   get: ^4.6.6
   image_cropper: ^5.0.1
   image_picker: ^1.0.7
+  intl: ^0.18.1
   mask_text_input_formatter: ^2.9.0
   uuid: ^4.3.3
 
