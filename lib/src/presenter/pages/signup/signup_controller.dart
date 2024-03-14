@@ -125,7 +125,7 @@ class SignUpController extends GetxController {
         DialogService.hideLoading();
 
         SnackbarService.showSuccess(
-          title: 'Enhorabuena',
+          title: 'Listo!',
           message: 'Bienvenid@ ${emailController.text.trim()}! 🍻',
         );
 

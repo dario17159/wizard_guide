@@ -14,7 +14,7 @@ class FinishedTaskPage extends GetWidget<HomeController> {
     return Obx(
       () => ListView.builder(
         itemCount: controller.taskFinishedList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         itemBuilder: (context, index) {
           final task = controller.taskFinishedList[index];
           return Container(

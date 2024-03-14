@@ -14,7 +14,7 @@ class InProgressTaskPage extends GetWidget<HomeController> {
     return Obx(
       () => ListView.builder(
         itemCount: controller.taskInProgressList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
         itemBuilder: (context, index) {
           final task = controller.taskInProgressList[index];
           return Container(

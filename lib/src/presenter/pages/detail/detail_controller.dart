@@ -43,13 +43,14 @@ class DetailController extends GetxController {
     try {
       if (titleController.text.isNotEmpty &&
           descriptionController.text.isNotEmpty) {
-        DialogService.showLoading(message: 'Agregando tarea...');
+        DialogService.showLoading(message: 'Actualizando tarea...');
         await _apiRepository
             .updateTask(task.copyWith(status: statusSelected.value));
         DialogService.hideLoading();
+        Get.back();
         SnackbarService.showSuccess(
-          title: 'Enhorabuena',
-          message: 'La tarea se a almacenado correctamente',
+          title: 'Listo!',
+          message: 'La tarea se a actualizado correctamente',
           position: SnackPosition.TOP,
         );
       } else {

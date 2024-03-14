@@ -13,8 +13,9 @@ class PendingTaskPage extends GetWidget<HomeController> {
   Widget build(BuildContext context) {
     return Obx(
       () => ListView.builder(
+        controller: controller.scrollController,
         itemCount: controller.taskPendingList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
         itemBuilder: (context, index) {
           final task = controller.taskPendingList[index];
           return Container(

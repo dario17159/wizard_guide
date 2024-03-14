@@ -37,21 +37,44 @@ class ProfilePage extends GetWidget<ProfileController> {
               height: 24,
             ),
             ListTile(
-              leading: const Icon(Icons.email_rounded),
-              title: Text(controller.userData.email),
+              leading: Icon(
+                Icons.email_rounded,
+                color: context.appColors.secondary,
+              ),
+              title: Text(
+                controller.userData.email,
+                style: TextStyle(color: context.appColors.textColorSecondary),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.phone_rounded),
-              title: Text(controller.userData.phone),
+              leading: Icon(
+                Icons.phone_rounded,
+                color: context.appColors.secondary,
+              ),
+              title: Text(
+                controller.userData.phone,
+                style: TextStyle(color: context.appColors.textColorSecondary),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.person_rounded),
-              title: Text(controller.userData.gender.value),
+              leading: Icon(
+                Icons.person_rounded,
+                color: context.appColors.secondary,
+              ),
+              title: Text(
+                controller.userData.gender.value,
+                style: TextStyle(color: context.appColors.textColorSecondary),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.assignment_ind_rounded),
-              title:
-                  Text(controller.userData.dateOfBirth.parseToAge.toString()),
+              leading: Icon(
+                Icons.assignment_ind_rounded,
+                color: context.appColors.secondary,
+              ),
+              title: Text(
+                controller.userData.dateOfBirth.parseToAge.toString(),
+                style: TextStyle(color: context.appColors.textColorSecondary),
+              ),
             ),
             const SizedBox(
               height: 24,

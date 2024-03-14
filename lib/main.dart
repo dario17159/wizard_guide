@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wizard_guide/firebase_options.dart';
 import 'package:wizard_guide/src/config/initialization_app.dart';
+import 'package:wizard_guide/src/core/extensions/extensions.dart';
 import 'package:wizard_guide/src/presenter/pages/home/home.dart';
 import 'package:wizard_guide/src/presenter/pages/login/login.dart';
 
@@ -27,14 +28,15 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Wizard Guide',
       debugShowCheckedModeBanner: false,
-      home:
-          FirebaseAuth.instance.currentUser != null ? const HomePage() : const LoginPage(),
+      home: FirebaseAuth.instance.currentUser != null
+          ? const HomePage()
+          : const LoginPage(),
       initialBinding: FirebaseAuth.instance.currentUser != null
           ? HomeBinding()
           : LoginBinding(),
-      theme: ThemeData(
-        colorSchemeSeed: const Color(0xFF1A3E6D),
-      ),
+      theme: lightTheme(Theme.of(context).textTheme),
+      darkTheme: darkTheme(Theme.of(context).textTheme),
+      themeMode: ThemeMode.system,
     );
   }
 }

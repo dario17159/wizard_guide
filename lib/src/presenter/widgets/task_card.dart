@@ -23,7 +23,10 @@ class TaskCard extends StatelessWidget {
             children: [
               Text(
                 task.title,
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(color: Colors.black),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -40,13 +43,14 @@ class TaskCard extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: 1.1,
                         child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              task.imageUrl,
-                              width: size.width,
-                              height: size.width,
-                              fit: BoxFit.cover,
-                            )),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            task.imageUrl,
+                            width: size.width,
+                            height: size.width,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -57,7 +61,10 @@ class TaskCard extends StatelessWidget {
               ),
               Text(
                 task.description,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: Colors.black),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),

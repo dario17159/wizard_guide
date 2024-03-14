@@ -1,9 +1,12 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wizard_guide/src/core/enums/enums.dart';
+import 'package:wizard_guide/src/core/extensions/extensions.dart';
 import 'package:wizard_guide/src/core/services/dialog_service.dart';
 import 'package:wizard_guide/src/core/services/snackbar_service.dart';
 import 'package:wizard_guide/src/data/repositories/api_repository_impl.dart';
@@ -38,13 +41,14 @@ class AddController extends GetxController {
             title: titleController.text.trim(),
             description: descriptionController.text.trim(),
             imageUrl: '',
-            status: TaskStatus(value: 'Pendiente', type: TaskStatusENUM.PENDING),
+            status:
+                TaskStatus(value: 'Pendiente', type: TaskStatusENUM.PENDING),
             imageFile: image.value);
         await _apiRepository.addTask(taskData);
         _resetFieldValues();
         DialogService.hideLoading();
         SnackbarService.showSuccess(
-          title: 'Enhorabuena',
+          title: 'Listo! 🍻',
           message: 'La tarea se a almacenado correctamente',
           position: SnackPosition.TOP,
         );
@@ -70,9 +74,10 @@ class AddController extends GetxController {
       Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+        decoration:  BoxDecoration(
+          color: context.appColors.appBackground,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        ),
         child: SafeArea(
           top: false,
           child: Column(
@@ -88,7 +93,7 @@ class AddController extends GetxController {
                 child: TextButton.icon(
                   onPressed: () {
                     Get.back();
-                    _onPickImage(ImageSource.gallery);
+                    _onPickImage(ImageSource.gallery, context);
                   },
                   icon: const Icon(Icons.wallpaper),
                   label: const Text('Galeria'),
@@ -99,7 +104,7 @@ class AddController extends GetxController {
                 child: TextButton.icon(
                   onPressed: () {
                     Get.back();
-                    _onPickImage(ImageSource.camera);
+                    _onPickImage(ImageSource.camera, context);
                   },
                   icon: const Icon(Icons.camera_alt_rounded),
                   label: const Text('Camara'),
@@ -112,11 +117,45 @@ class AddController extends GetxController {
     );
   }
 
-  Future<void> _onPickImage(ImageSource source) async {
-    final XFile? pickerResult = await _imagePicker.pickImage(source: source);
-    if (pickerResult != null) {
-      image.value = File(pickerResult.path);
+  Future<void> _onPickImage(ImageSource source, BuildContext context) async {
+    try {
+      final XFile? pickerResult = await _imagePicker.pickImage(source: source);
+      if (pickerResult != null) {
+        // ignore: use_build_context_synchronously
+        image.value = await _cropImage(File(pickerResult.path), context);
+      }
+    } catch (e) {
+      log(e.toString());
     }
+  }
+
+  Future<File?> _cropImage(File imageFile, BuildContext context) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Recortar Imagen',
+          toolbarColor: context.appColors.primary,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.square,
+          lockAspectRatio: true,
+        ),
+        IOSUiSettings(
+          title: 'Recortar Imagen',
+          aspectRatioLockEnabled: true,
+          aspectRatioLockDimensionSwapEnabled: true,
+          aspectRatioPickerButtonHidden: true,
+          cancelButtonTitle: 'Cancelar',
+          doneButtonTitle: 'Confirmar',
+          resetButtonHidden: true,
+        ),
+      ],
+    );
+    return croppedFile != null ? File(croppedFile.path) : null;
   }
 
   void onClickDeleteImage() => image.value = null;
